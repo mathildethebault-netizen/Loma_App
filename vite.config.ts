@@ -6,12 +6,13 @@ export default defineConfig(({ mode }) => {
   const isProd = mode === "production";
 
   return {
-    base: "./",
+    base: "./", // 👈 Important pour Vercel
     define: {
-      // 🧱 On neutralise TOUTES les variables internes Vite qui cassent sur Vercel
+      // 🧱 On neutralise toutes les variables Vite internes connues
       __DEFINES__: {},
       __HMR_CONFIG_NAME__: "{}",
       __SERVER_HOST__: JSON.stringify(""),
+      __BASE__: JSON.stringify("./"),
       "process.env.NODE_ENV": JSON.stringify(isProd ? "production" : "development"),
       "import.meta.env.DEV": JSON.stringify(!isProd),
       "import.meta.env.PROD": JSON.stringify(isProd)
@@ -40,6 +41,8 @@ export default defineConfig(({ mode }) => {
       chunkSizeWarningLimit: 1000,
       minify: "esbuild"
     },
-    server: { port: 5173 }
+    server: {
+      port: 5173
+    }
   };
 });
