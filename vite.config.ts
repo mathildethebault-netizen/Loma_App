@@ -4,12 +4,12 @@ import react from "@vitejs/plugin-react";
 import { VitePWA } from "vite-plugin-pwa";
 
 export default defineConfig({
-  base: "./", // ✅ Corrige les chemins relatifs (évite les erreurs __BASE__)
+  base: "/", // ✅ Fixe correctement la base pour Vercel
   plugins: [
     react(),
     VitePWA({
       registerType: "autoUpdate",
-      includeAssets: ["assets/favicon.svg", "assets/luma.svg"],
+      includeAssets: ["favicon.svg", "assets/luma.svg"],
       manifest: {
         name: "Loma Application",
         short_name: "Loma",
@@ -33,6 +33,8 @@ export default defineConfig({
     port: 5173
   },
   define: {
+    // ✅ Corrige l'erreur "__BASE__" en production
+    __BASE__: JSON.stringify("/"),
     "process.env.NODE_ENV": JSON.stringify(
       process.env.NODE_ENV || "production"
     )
