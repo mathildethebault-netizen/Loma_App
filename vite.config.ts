@@ -1,3 +1,4 @@
+// vite.config.ts
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { VitePWA } from "vite-plugin-pwa";
@@ -6,13 +7,16 @@ export default defineConfig(({ mode }) => {
   const isProd = mode === "production";
 
   return {
-    base: "./", // 👈 Important pour Vercel
+    base: "./", // ✅ indispensable pour que Vercel serve correctement les fichiers
     define: {
-      // 🧱 On neutralise toutes les variables Vite internes connues
+      // 🧱 Neutralisation complète des variables internes Vite
       __DEFINES__: {},
       __HMR_CONFIG_NAME__: "{}",
       __SERVER_HOST__: JSON.stringify(""),
       __BASE__: JSON.stringify("./"),
+      __HMR_PROTOCOL__: JSON.stringify(""),
+      __HMR_HOSTNAME__: JSON.stringify(""),
+      __HMR_PORT__: JSON.stringify(""),
       "process.env.NODE_ENV": JSON.stringify(isProd ? "production" : "development"),
       "import.meta.env.DEV": JSON.stringify(!isProd),
       "import.meta.env.PROD": JSON.stringify(isProd)
@@ -41,8 +45,6 @@ export default defineConfig(({ mode }) => {
       chunkSizeWarningLimit: 1000,
       minify: "esbuild"
     },
-    server: {
-      port: 5173
-    }
+    server: { port: 5173 }
   };
 });
