@@ -4,12 +4,12 @@ import react from "@vitejs/plugin-react";
 import { VitePWA } from "vite-plugin-pwa";
 
 export default defineConfig({
-  base: "/", // ✅ Fixe correctement la base pour Vercel
+  base: "./",
   plugins: [
     react(),
     VitePWA({
       registerType: "autoUpdate",
-      includeAssets: ["favicon.svg", "assets/luma.svg"],
+      includeAssets: ["favicon.svg", "robots.txt"],
       manifest: {
         name: "Loma Application",
         short_name: "Loma",
@@ -27,16 +27,14 @@ export default defineConfig({
     outDir: "dist",
     chunkSizeWarningLimit: 1000,
     sourcemap: false,
-    minify: "esbuild"
+    minify: "esbuild",
+
+    // ✅ Empêche Vite de planter sur recharts
+    rollupOptions: {
+      external: ["recharts"]
+    }
   },
   server: {
     port: 5173
-  },
-  define: {
-    // ✅ Corrige l'erreur "__BASE__" en production
-    __BASE__: JSON.stringify("/"),
-    "process.env.NODE_ENV": JSON.stringify(
-      process.env.NODE_ENV || "production"
-    )
   }
 });
