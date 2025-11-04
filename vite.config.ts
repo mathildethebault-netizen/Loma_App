@@ -7,6 +7,15 @@ export default defineConfig(({ mode }) => {
 
   return {
     base: "./",
+    define: {
+      // 🧱 On neutralise TOUTES les variables internes Vite qui cassent sur Vercel
+      __DEFINES__: {},
+      __HMR_CONFIG_NAME__: "{}",
+      __SERVER_HOST__: JSON.stringify(""),
+      "process.env.NODE_ENV": JSON.stringify(isProd ? "production" : "development"),
+      "import.meta.env.DEV": JSON.stringify(!isProd),
+      "import.meta.env.PROD": JSON.stringify(isProd)
+    },
     plugins: [
       react(),
       VitePWA({
@@ -25,20 +34,12 @@ export default defineConfig(({ mode }) => {
         }
       })
     ],
-    define: {
-      // ✅ Ces deux variables sont neutralisées pour corriger ton erreur
-      __DEFINES__: {},
-      __HMR_CONFIG_NAME__: "{}",
-      "process.env.NODE_ENV": JSON.stringify(isProd ? "production" : "development")
-    },
     build: {
       outDir: "dist",
       sourcemap: false,
-      minify: "esbuild",
-      chunkSizeWarningLimit: 1000
+      chunkSizeWarningLimit: 1000,
+      minify: "esbuild"
     },
-    server: {
-      port: 5173
-    }
+    server: { port: 5173 }
   };
 });
