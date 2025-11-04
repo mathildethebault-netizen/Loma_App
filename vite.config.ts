@@ -4,8 +4,9 @@ import react from "@vitejs/plugin-react";
 import { VitePWA } from "vite-plugin-pwa";
 
 export default defineConfig({
-  base: "./", // Corrige les chemins sur Vercel
+  base: "./", // ✅ Corrige les chemins sur Vercel
   define: {
+    __DEFINES__: {}, // ✅ Neutralise la dernière variable interne
     "process.env.NODE_ENV": JSON.stringify("production"),
   },
   plugins: [
@@ -34,7 +35,6 @@ export default defineConfig({
   },
   server: {
     port: 5173,
-    // ⛔ Désactive le HMR entièrement (plus de variables __HMR__)
-    hmr: false,
+    hmr: false, // ✅ Supprime toutes les variables HMR
   },
 });
