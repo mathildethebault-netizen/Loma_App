@@ -7,7 +7,7 @@ export default defineConfig(({ mode }) => {
   const isProd = mode === "production";
 
   return {
-    base: "/", // ✅ Important pour Vercel
+    base: "./", // ✅ Correction pour Vercel
     define: {
       "process.env.NODE_ENV": JSON.stringify(isProd ? "production" : "development"),
       ...(isProd
