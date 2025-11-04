@@ -7,17 +7,18 @@ export default defineConfig(({ mode }) => {
   const isProd = mode === "production";
 
   return {
-    base: "./", // ✅ Indispensable pour que Vercel serve correctement les assets
+    base: "./", // ✅ Corrige les chemins sur Vercel
     define: {
-      // 🚧 Neutralisation TOTALE des variables internes de Vite (dev HMR)
+      // 🚧 Neutralisation TOTALE de toutes les variables internes Vite/HMR
       __DEFINES__: {},
+      __BASE__: JSON.stringify("./"),
+      __SERVER_HOST__: JSON.stringify(""),
       __HMR_PROTOCOL__: JSON.stringify(""),
       __HMR_HOSTNAME__: JSON.stringify(""),
       __HMR_PORT__: JSON.stringify(""),
       __HMR_BASE__: JSON.stringify("./"),
       __HMR_CONFIG_NAME__: "{}",
-      __SERVER_HOST__: JSON.stringify(""),
-      __BASE__: JSON.stringify("./"),
+      __HMR_DIRECT_TARGET__: JSON.stringify(""),
       "process.env.NODE_ENV": JSON.stringify(isProd ? "production" : "development"),
       "import.meta.env.DEV": JSON.stringify(!isProd),
       "import.meta.env.PROD": JSON.stringify(isProd)
@@ -49,7 +50,6 @@ export default defineConfig(({ mode }) => {
       chunkSizeWarningLimit: 1000,
       rollupOptions: {
         onwarn(warning, warn) {
-          // 🧱 Ignore les avertissements liés aux variables internes Vite
           if (/__HMR_|__BASE__|__DEFINES__/.test(warning.message)) return;
           warn(warning);
         }
