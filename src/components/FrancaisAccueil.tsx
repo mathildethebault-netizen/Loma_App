@@ -1,6 +1,6 @@
+// src/components/FrancaisAccueil.tsx
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import mondeFrancais from "../assets/v3.png"; // ✅ ton image finale (fond complet)
 
 export default function FrancaisAccueil() {
   const navigate = useNavigate();
@@ -9,7 +9,7 @@ export default function FrancaisAccueil() {
     <div
       className="relative w-screen h-screen overflow-hidden flex items-center justify-center"
       style={{
-        backgroundImage: `url(${mondeFrancais})`,
+        backgroundImage: "url('/v3.png')", // ✅ le fichier est dans /public
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
