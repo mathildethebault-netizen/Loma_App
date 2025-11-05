@@ -1,11 +1,8 @@
-// src/App.tsx
 import {
   createBrowserRouter,
   RouterProvider,
-  Link,
-  useNavigate,
-  Outlet,
   Navigate,
+  Outlet,
   useLocation,
 } from "react-router-dom";
 import { useEffect } from "react";
@@ -15,22 +12,27 @@ import AccueilMonde from "./worlds/AccueilMonde";
 import FrancaisMonde from "./worlds/FrancaisMonde";
 import MathsMonde from "./worlds/MathsMonde";
 
+// 🔢 Mondes d’accueil
+import MathsAccueil from "./components/MathsAccueil";
+import FrancaisAccueil from "./components/FrancaisAccueil"; // ✅ nouvelle page (fond V3)
+
 // 👩‍🏫 Espace enseignant
 import EnseignantHost from "./worlds/enseignant/EnseignantHost";
 
-// 🌸 Nouvelle page d’accueil LOMA (avec mascottes)
+// 🏠 Accueil général (Espace Enfant / Enseignant)
+import AccueilPrincipal from "./components/AccueilPrincipal";
+
+// 🌸 Accueil Loma (choix Français / Maths)
 import AccueilLoma from "./components/AccueilLoma";
 
 // ======================================================
-// 🌈 Layout global (fond général + gestion des sous-pages)
+// 🌈 Layout global
 // ======================================================
 function AppContent() {
   const location = useLocation();
-
   const isAccueil = location.pathname === "/";
-  const isMonde = location.pathname === "/child";
 
-  // 🎹 Raccourci clavier pour accéder à l’espace enseignant
+  // 🎹 Raccourci enseignant (Ctrl + Shift + L)
   useEffect(() => {
     const handleShortcut = (e: KeyboardEvent) => {
       if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "l") {
@@ -70,18 +72,43 @@ const router = createBrowserRouter([
     path: "/",
     element: <AppContent />,
     children: [
-      // 🏠 Nouvelle page d’accueil Loma
-      { index: true, element: <AccueilLoma /> },
+      // 🏠 Page d’accueil principale (choix Élève / Enseignant)
+      { index: true, element: <AccueilPrincipal /> },
 
-      // 🌸 Mondes enfants
-      { path: "child", element: <AccueilMonde /> },
-      { path: "francais", element: <FrancaisMonde /> },
-      { path: "maths", element: <MathsMonde /> },
+      // 🌿 Accueil LOMA (choix Français / Maths)
+      { path: "loma", element: <AccueilLoma /> },
 
-      // 👩‍🏫 Espace enseignant
+      // 🟣 Monde du Français (page d’accueil + sous-pages)
+      {
+        path: "francais",
+        children: [
+          { index: true, element: <FrancaisAccueil /> }, // ✅ ton image V3 ici
+          { path: "lecture", element: <FrancaisMonde /> },
+          { path: "grammaire", element: <FrancaisMonde /> },
+          { path: "orthographe", element: <FrancaisMonde /> },
+          { path: "lexique", element: <FrancaisMonde /> },
+        ],
+      },
+
+      // 🔢 Monde des Maths
+      {
+        path: "maths",
+        children: [
+          { index: true, element: <MathsAccueil /> },
+          { path: "calculs", element: <MathsMonde /> },
+          { path: "geometrie", element: <MathsMonde /> },
+          { path: "grandeurs-mesures", element: <MathsMonde /> },
+          { path: "problemes", element: <MathsMonde /> },
+        ],
+      },
+
+      // 👩‍🏫 Espace Enseignant
       { path: "enseignant", element: <EnseignantHost /> },
 
-      // 🚫 Redirection vers l’accueil si mauvaise URL
+      // 🌸 Optionnel : Monde Enfant
+      { path: "child", element: <AccueilMonde /> },
+
+      // 🚫 Redirection par défaut
       { path: "*", element: <Navigate to="/" replace /> },
     ],
   },
